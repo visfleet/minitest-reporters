@@ -15,16 +15,16 @@ module Minitest
         @single_file = options[:single_file]
 
         if empty
-          puts "Emptying #{@reports_path}"
+          puts "Removing and recreating directory: #{@reports_path}"
           FileUtils.remove_dir(@reports_path) if File.exists?(@reports_path)
           FileUtils.mkdir_p(@reports_path)
         end
       end
 
       def report
+        puts "Writing XML reports to: #{@reports_path}"
         super
 
-        puts "Writing XML reports to #{@reports_path}"
         suites = tests.group_by(&:class)
 
         if @single_file
@@ -54,7 +54,12 @@ module Minitest
             end
           end
         end
-        File.open(filename_for(suite), "w") { |file| file << xml.target! }
+        begin
+          File.open(filename_for(suite), "w") { |file| file << xml.target! }
+        rescue => e
+          puts "ERROR: Minitest::Reporters::JUnitReporter can't write output file: "
+          puts "#{e.backtrace.first}: #{e.message} (#{e.class})", e.backtrace.map{|s| "\t#{s}"}
+        end
       end
 
       def xml_message_for(test)
