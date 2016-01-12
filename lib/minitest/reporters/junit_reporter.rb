@@ -11,6 +11,8 @@ module Minitest
     class JUnitReporter < BaseReporter
       def initialize(reports_dir = "test/reports", empty = true, options = {})
         super({})
+
+        puts "JUnitReporter will write to: #{@reports_path}"
         @reports_path = File.absolute_path(reports_dir)
         @single_file = options[:single_file]
 

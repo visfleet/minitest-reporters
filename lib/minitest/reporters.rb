@@ -44,6 +44,8 @@ module Minitest
       Minitest::Test.class_eval do
         def run_with_hooks(*args)
           if defined?(Minitest::Reporters) && (reporters = Minitest::Reporters.reporters)
+            reporters.each { |r| puts "Minitest registered reporter: #{r.class}"}
+            
             reporters.each { |r| r.before_test(self) }
             result = run_without_hooks(*args)
             reporters.each { |r| r.after_test(self) }
