@@ -11,9 +11,11 @@ module Minitest
     class JUnitReporter < BaseReporter
       def initialize(reports_dir = "test/reports", empty = true, options = {})
         super({})
+        @reports_path = File.absolute_path(reports_dir)
 
         puts "JUnitReporter will write to: #{@reports_path}"
-        @reports_path = File.absolute_path(reports_dir)
+        File.open(File.join(@reports_path, 'junit_reporter_write_test.log'), "w") { |file| file.puts "JUnitReporter testing that it can write..." }
+
         @single_file = options[:single_file]
 
         if empty
