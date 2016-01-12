@@ -120,7 +120,8 @@ module Minitest
           result[:"#{result(test)}_count"] += 1
           result[:assertion_count] += test.assertions
           result[:test_count] += 1
-          result[:time] += test.time
+          result[:time] ||= 0.0
+          result[:time] += (test.time || 0)
         end
         result
       end
